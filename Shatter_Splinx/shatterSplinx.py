@@ -1,0 +1,2 @@
+class ShatterSplinx:
+    pass
