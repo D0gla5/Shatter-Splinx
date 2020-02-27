@@ -11,7 +11,7 @@ WINDOW_WIDTH  = 800
 # pixels high
 WINDOW_HEIGHT = 800
 # frames per second
-DESIRED_RATE  = 20
+DESIRED_RATE  = 60
 
 class PygameApp( game.Game ):
 
@@ -26,7 +26,7 @@ class PygameApp( game.Game ):
         
         # create a game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
-        self.mGame = ShatterSplinx()
+        self.mGame = ShatterSplinx(width, height)
         self.startUpTime = pygame.time.get_ticks()
         return
         
@@ -53,6 +53,11 @@ class PygameApp( game.Game ):
 
         # Update the state of the game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
+
+        if pygame.K_SPACE in newkeys:
+             if self.mGame.circle.getDistance(self.mGame.circle2) < 100:
+                 self.mGame.circle, self.mGame.circle2 = self.mGame.makeRandomShapes()
+                
         
         self.mGame.update()
 
@@ -60,6 +65,7 @@ class PygameApp( game.Game ):
     
     def paint( self, surface ):
         # Draw the current state of the game instance
+        pygame.draw.rect(surface, (255,255,255), (0,0,self.width,self.height))
         self.mGame.draw( surface )
         return
 
