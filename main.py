@@ -1,15 +1,15 @@
 import pygame
 import game
 # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
-from asteroids import Asteroids
+from shatterSplinx import ShatterSplinx
 
 # YOU SHOULD CONFIGURE THESE TO MATCH YOUR GAME
 # window title bar text
-TITLE = "ASTEROIDS"
+TITLE = "Shatter splinx"
 # pixels width
-WINDOW_WIDTH  = 900
+WINDOW_WIDTH  = 800
 # pixels high
-WINDOW_HEIGHT = 900
+WINDOW_HEIGHT = 800
 # frames per second
 DESIRED_RATE  = 20
 
@@ -26,7 +26,7 @@ class PygameApp( game.Game ):
         
         # create a game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
-        self.mGame = Asteroids(width, height)
+        self.mGame = ShatterSplinx()
         self.startUpTime = pygame.time.get_ticks()
         return
         
@@ -53,35 +53,13 @@ class PygameApp( game.Game ):
 
         # Update the state of the game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
-        if pygame.K_LEFT in keys:
-            self.mGame.turnShipLeft(20)
-        elif pygame.K_RIGHT in keys:
-            self.mGame.turnShipRight(20)
         
-        if pygame.K_UP in keys:
-            self.mGame.accelerateShip(10)
-
-        if pygame.K_SPACE in newkeys:
-            self.mGame.fire()
-
-        if pygame.K_r in newkeys:
-            self.__init__(self.title, self.width, self.height, self.frameRate)
-
-        self.mGame.evolve( dt )
-        timeSeconds = (pygame.time.get_ticks()-self.startUpTime)/1000
-        if not self.mGame.timerStopped():
-            time = str(timeSeconds)
-            milis = time[time.index("."):]
-            seconds = time[:time.index(".")]
-            while len(milis) < 4:
-                milis = milis + "0"
-            self.mGame.setTimer(seconds+milis)
+        self.mGame.update()
 
         return
     
     def paint( self, surface ):
         # Draw the current state of the game instance
-        pygame.draw.rect(surface, (0,0,0), (0,0,self.width, self.height), 0)
         self.mGame.draw( surface )
         return
 
