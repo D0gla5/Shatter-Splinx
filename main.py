@@ -24,10 +24,12 @@ class PygameApp( game.Game ):
         self.height = height
         self.frameRate = frame_rate
         
+        
         # create a game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
         self.mGame = ShatterSplinx(width, height)
         self.startUpTime = pygame.time.get_ticks()
+        self.timeSinceShapeSpawn = self.startUpTime
         return
         
         
@@ -54,11 +56,19 @@ class PygameApp( game.Game ):
         # Update the state of the game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
 
-        if pygame.K_SPACE in newkeys:
-             if self.mGame.circle.getDistance(self.mGame.circle2) < 100:
-                 self.mGame.circle, self.mGame.circle2 = self.mGame.makeRandomShapes()
+        self.timeSinceShapeSpawn += dt
+
+        if pygame.mouse.get_pressed()[0]:
+            for pair in self.mGame.shapePairs:
+                s1 = pair[0]
+                s2 = pair[1]
+                if s1.getDistance(s2) < 100 and s1.getDistanceFromPoint(x,y) < 75:
+                    self.mGame.shapePairs.remove(pair)
+
+        if self.timeSinceShapeSpawn > .75:
+            self.mGame.addNewShapePair()
+            self.timeSinceShapeSpawn = 0
                 
-        
         self.mGame.update()
 
         return

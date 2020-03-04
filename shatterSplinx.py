@@ -1,38 +1,52 @@
 from shapes import Shape
-import random
+from random import randint, choice
 
 class ShatterSplinx:
     def __init__(self, screenWidth, screenHeight):
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
 
-        self.circle, self.circle2 = self.makeRandomShapes()
+        self.shapePairs = []
 
     def update(self):
-        self.circle.move()
-        self.circle2.move()
+        for pair in self.shapePairs:
+            pair[0].move()
+            pair[1].move()
 
     def draw(self, surface):
-        self.circle.show(surface)
-        self.circle2.show(surface)
+        for pair in self.shapePairs:
+            pair[0].show(surface)
+            pair[1].show(surface)
+
+    def addNewShapePair(self):
+        self.shapePairs.append(self.makeRandomShapes())
 
     def makeRandomShapes(self):
         availablePosition = [0,1,2,3]
         shapes = []
 
-        speed = random.randint(2,8)
+        x = randint(150,self.screenWidth-150)
+        y = randint(150,self.screenHeight-150)
+
+        color = (randint(0,255), randint(0,255), randint(0,255))
+
+        speed = randint(8,10)
+
+        distanceFromSides = [x,y,self.screenWidth-x, self.screenHeight-y]
+        distance = max(distanceFromSides)
 
         for i in range(2):
-            randomNum = random.choice(availablePosition)
+            randomNum = choice(availablePosition)
             availablePosition.remove(randomNum)
+
             if randomNum == 0:
-                shape = Shape(self.screenWidth/2, 0, 0, speed)
+                shape = Shape(x-distance, y, speed, 0, color)
             if randomNum == 1:
-                shape = Shape(self.screenWidth, self.screenHeight/2, -speed, 0)
+                shape = Shape(x, y-distance, 0, speed, color)
             if randomNum == 2:
-                shape = Shape(self.screenWidth/2, self.screenHeight, 0, -speed)
+                shape = Shape(x+distance, y, -speed, 0, color)
             if randomNum == 3:
-                shape = Shape(0, self.screenHeight/2, speed, 0)
+                shape = Shape(x, y+distance, 0, -speed, color)
 
             shapes.append(shape)
 
