@@ -1,5 +1,6 @@
 from shapes import Shape
 from random import randint, choice
+import pygame
 
 class ShatterSplinx:
     def __init__(self, screenWidth, screenHeight):
@@ -7,6 +8,10 @@ class ShatterSplinx:
         self.screenHeight = screenHeight
 
         self.shapePairs = []
+        self.mousePos = (0,0)
+
+    def setMousePos(self, mPos):
+        self.mousePos = mPos
 
     def update(self):
         for pair in self.shapePairs:
@@ -17,6 +22,8 @@ class ShatterSplinx:
         for pair in self.shapePairs:
             pair[0].show(surface)
             pair[1].show(surface)
+        pygame.draw.circle(surface, (255,255,255), self.mousePos, 5)
+        pygame.draw.circle(surface, (255,255,255), self.mousePos, 25, 2)
 
     def addNewShapePair(self):
         self.shapePairs.append(self.makeRandomShapes())
@@ -25,12 +32,14 @@ class ShatterSplinx:
         availablePosition = [0,1,2,3]
         shapes = []
 
-        x = randint(150,self.screenWidth-150)
-        y = randint(150,self.screenHeight-150)
+        safeZone = 150
+
+        x = randint(safeZone,self.screenWidth-safeZone)
+        y = randint(safeZone,self.screenHeight-safeZone)
 
         color = (randint(0,255), randint(0,255), randint(0,255))
 
-        speed = randint(8,10)
+        speed = randint(6,6)
 
         distanceFromSides = [x,y,self.screenWidth-x, self.screenHeight-y]
         distance = max(distanceFromSides)

@@ -30,6 +30,9 @@ class PygameApp( game.Game ):
         self.mGame = ShatterSplinx(width, height)
         self.startUpTime = pygame.time.get_ticks()
         self.timeSinceShapeSpawn = self.startUpTime
+
+        pygame.mouse.set_visible(False)
+
         return
         
         
@@ -68,6 +71,8 @@ class PygameApp( game.Game ):
         if self.timeSinceShapeSpawn > .75:
             self.mGame.addNewShapePair()
             self.timeSinceShapeSpawn = 0
+
+        self.mGame.setMousePos((x,y))
                 
         self.mGame.update()
 
@@ -75,7 +80,7 @@ class PygameApp( game.Game ):
     
     def paint( self, surface ):
         # Draw the current state of the game instance
-        pygame.draw.rect(surface, (255,255,255), (0,0,self.width,self.height))
+        pygame.draw.rect(surface, (0,0,0), (0,0,self.width,self.height))
         self.mGame.draw( surface )
         return
 
