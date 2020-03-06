@@ -20,3 +20,16 @@ class Shape:
 
     def getDistanceFromPoint(self, x, y):
         return ((self.x - x)**2 + (self.y - y)**2)**.5
+
+    def isOutOfBounds(self, width, height):
+        outOfBounds = False
+        if self.x < 0 and self.xSpeed < 0:
+            outOfBounds = True
+        if self.y < 0 and self.ySpeed < 0:
+            outOfBounds = True
+        if self.x > width and self.xSpeed > 0:
+            outOfBounds = True
+        if self.y > height and self.ySpeed > 0:
+            outOfBounds = True
+
+        return outOfBounds

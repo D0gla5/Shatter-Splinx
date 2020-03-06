@@ -59,14 +59,11 @@ class PygameApp( game.Game ):
         # Update the state of the game instance
         # YOU SHOULD CHANGE THIS TO IMPORT YOUR GAME MODULE
 
+
         self.timeSinceShapeSpawn += dt
 
-        if pygame.mouse.get_pressed()[0]:
-            for pair in self.mGame.shapePairs:
-                s1 = pair[0]
-                s2 = pair[1]
-                if s1.getDistance(s2) < 100 and s1.getDistanceFromPoint(x,y) < 75:
-                    self.mGame.shapePairs.remove(pair)
+        if 1 in newbuttons:
+            self.mGame.checkIfClickedShapes(x,y)
 
         if self.timeSinceShapeSpawn > .75:
             self.mGame.addNewShapePair()
@@ -74,7 +71,7 @@ class PygameApp( game.Game ):
 
         self.mGame.setMousePos((x,y))
                 
-        self.mGame.update()
+        self.mGame.update(dt)
 
         return
     
