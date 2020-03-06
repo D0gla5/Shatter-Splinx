@@ -13,7 +13,7 @@ class ShatterSplinx:
         self.mousePos = (0,0)
 
         self.score = 0
-        self.lives = 3
+        self.health = 100
 
         self.cursorColor = (255,255,255)
         self.timeSinceColorChange = 0
@@ -47,6 +47,8 @@ class ShatterSplinx:
         pygame.draw.circle(surface, self.cursorColor, self.mousePos, 5)
         pygame.draw.circle(surface, self.cursorColor, self.mousePos, 25, 2)
 
+        pygame.draw.rect(surface, (100,255,100), (100, 50, self.health*6, 10))
+
     def addNewShapePair(self):
         self.shapePairs.append(self.makeRandomShapes())
 
@@ -70,6 +72,11 @@ class ShatterSplinx:
         self.timeSinceColorChange = 0
 
         self.score += 1
+        self.health += 1
+        if self.health > 100:
+            self.healtyh = 100
+
+
         print(self.score)
         self.deleteShapes(pair)
 
@@ -77,8 +84,8 @@ class ShatterSplinx:
         self.cursorColor = (255,100,100)
         self.timeSinceColorChange = 0
 
-        self.lives -= 1
-        if self.lives < 0:
+        self.health -= 25
+        if self.health < 0:
             sys.exit()
 
     def deleteShapes(self, shapes):
