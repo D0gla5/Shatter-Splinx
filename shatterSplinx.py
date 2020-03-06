@@ -47,6 +47,7 @@ class ShatterSplinx:
         pygame.draw.circle(surface, self.cursorColor, self.mousePos, 5)
         pygame.draw.circle(surface, self.cursorColor, self.mousePos, 25, 2)
 
+        pygame.draw.rect(surface, (255,100,100), (100,50,600,10))
         pygame.draw.rect(surface, (100,255,100), (100, 50, self.health*6, 10))
 
     def addNewShapePair(self):
