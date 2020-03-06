@@ -75,7 +75,7 @@ class ShatterSplinx:
         self.score += 1
         self.health += 1
         if self.health > 100:
-            self.healtyh = 100
+            self.health = 100
 
 
         print(self.score)
