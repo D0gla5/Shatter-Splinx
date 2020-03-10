@@ -19,6 +19,8 @@ class ShatterSplinx:
         self.timeSinceColorChange = 0
         self.timer = 0;
 
+        self.scoreBoard = pygame.font.SysFont("Courier New", 24)
+
     def setMousePos(self, mPos):
         self.mousePos = mPos
 
@@ -37,18 +39,29 @@ class ShatterSplinx:
             pair[0].move()
             pair[1].move()
             
-            
+    def drawScoreBoard(self, surface, x, y):
+        text_object = self.scoreBoard.render(str(self.score), False, (255,255,255))
+        text_rect = text_object.get_rect( )
+        text_rect.center = (x, y)
+        surface.blit( text_object, text_rect )
 
     def draw(self, surface):
         for pair in self.shapePairs:
             pair[0].show(surface)
             pair[1].show(surface)
 
+
+        #draw the mouse cursor
         pygame.draw.circle(surface, self.cursorColor, self.mousePos, 5)
         pygame.draw.circle(surface, self.cursorColor, self.mousePos, 25, 2)
 
+
+        #Draw the health bar
         pygame.draw.rect(surface, (255,100,100), (100,50,600,10))
         pygame.draw.rect(surface, (100,255,100), (100, 50, self.health*6, 10))
+
+        #draw the score
+        self.drawScoreBoard(surface, self.screenWidth/2, 25)
 
     def addNewShapePair(self):
         self.shapePairs.append(self.makeRandomShapes())
