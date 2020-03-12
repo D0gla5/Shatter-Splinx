@@ -1,60 +1,76 @@
 from shapes import Shape
 from random import randint, choice
+from button import Button
 import pygame
 
 import sys
+
+# def startButton():
+#     main()
+# button = Button(surface, text="PLay", command=startButton)
+# button.pack()
+# mainloop()
 
 class ShatterSplinx:
     def __init__(self, screenWidth, screenHeight):
         self.screenWidth = screenWidth
         self.screenHeight = screenHeight
 
-        self.shapePairs = []
         self.mousePos = (0,0)
+
+        self.cursorColor = (255,255,255)
+
+        self.startButton = Button((100,255,100), (300,400,200,100), "START", self.startGame)
+
+        self.scoreBoard = pygame.font.SysFont("Courier New", 24)
+
+        self.playing = False
 
         self.score = 0
         self.health = 100
+        self.shapePairs = []
 
-        self.cursorColor = (255,255,255)
+    def startGame(self):
+        self.score = 0
+        self.health = 100
+        self.shapePairs = []
         self.timeSinceColorChange = 0
-        self.timer = 0;
-
-        self.scoreBoard = pygame.font.SysFont("Courier New", 24)
+        self.timer = 0
+        self.cursorColor = (255,255,255)
+        self.playing = True
 
     def setMousePos(self, mPos):
         self.mousePos = mPos
 
     def update(self, dt):
-        self.timeSinceColorChange += dt
+        if(self.playing):
+            self.timeSinceColorChange += dt
 
-        if self.timeSinceColorChange > .25:
-            self.cursorColor = (255,255,255)
+            if self.timeSinceColorChange > .25:
+                self.cursorColor = (255,255,255)
 
-        for pair in self.shapePairs:
+            for pair in self.shapePairs:
 
-            if pair[0].isOutOfBounds(self.screenWidth, self.screenHeight) and pair[1].isOutOfBounds(self.screenWidth, self.screenHeight):
-                self.missedShapes()
-                self.deleteShapes(pair)
+                if pair[0].isOutOfBounds(self.screenWidth, self.screenHeight) and pair[1].isOutOfBounds(self.screenWidth, self.screenHeight):
+                    self.missedShapes()
+                    self.deleteShapes(pair)
 
-            pair[0].move()
-            pair[1].move()
+                pair[0].move()
+                pair[1].move()
+        
             
     def drawScoreBoard(self, surface, x, y):
-        text_object = self.scoreBoard.render(str(self.score), False, (255,255,255))
-        text_rect = text_object.get_rect( )
-        text_rect.center = (x, y)
-        surface.blit( text_object, text_rect )
+        if(self.playing):
+            text_object = self.scoreBoard.render(str(self.score), False, (255,255,255))
+            text_rect = text_object.get_rect( )
+            text_rect.center = (x, y)
+            surface.blit( text_object, text_rect )
 
     def draw(self, surface):
-        for pair in self.shapePairs:
-            pair[0].show(surface)
-            pair[1].show(surface)
-
-
-        #draw the mouse cursor
-        pygame.draw.circle(surface, self.cursorColor, self.mousePos, 5)
-        pygame.draw.circle(surface, self.cursorColor, self.mousePos, 25, 2)
-
+        if self.playing:
+            for pair in self.shapePairs:
+                pair[0].show(surface)
+                pair[1].show(surface)
 
         #Draw the health bar
         pygame.draw.rect(surface, (255,100,100), (100,50,600,10))
@@ -62,6 +78,13 @@ class ShatterSplinx:
 
         #draw the score
         self.drawScoreBoard(surface, self.screenWidth/2, 25)
+
+        if not self.playing:
+            self.startButton.draw(surface)
+
+        #draw the mouse cursor
+        pygame.draw.circle(surface, self.cursorColor, self.mousePos, 5)
+        pygame.draw.circle(surface, self.cursorColor, self.mousePos, 25, 2)
 
     def addNewShapePair(self):
         self.shapePairs.append(self.makeRandomShapes())
@@ -100,7 +123,8 @@ class ShatterSplinx:
 
         self.health -= 25
         if self.health < 0:
-            sys.exit()
+            self.playing = False
+            self.health = 100
 
     def deleteShapes(self, shapes):
         self.shapePairs.remove(shapes)
